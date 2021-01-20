@@ -59,7 +59,12 @@ class PlantDetailViewModelTest {
         hiltRule.inject()
 
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        appDatabase = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
+        appDatabase = Room
+            .inMemoryDatabaseBuilder(context, AppDatabase::class.java)
+            .allowMainThreadQueries()
+            .build()
+        gardenPlantRepository = GardenPlantingRepository(appDatabase.gardenPlantingDao())
+        plantRepository = PlantRepository(appDatabase.plantDao())
 
         viewModel = PlantDetailViewModel(plantRepository, gardenPlantRepository, testPlant.plantId)
     }

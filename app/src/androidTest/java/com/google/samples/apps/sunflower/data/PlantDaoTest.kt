@@ -17,6 +17,7 @@
 package com.google.samples.apps.sunflower.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.asLiveData
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -43,7 +44,10 @@ class PlantDaoTest {
 
     @Before fun createDb() = runBlocking {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        database = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
+        database = Room
+            .inMemoryDatabaseBuilder(context, AppDatabase::class.java)
+            .allowMainThreadQueries()
+            .build()
         plantDao = database.plantDao()
 
         // Insert plants in non-alphabetical order to test that results are sorted by name
@@ -55,7 +59,7 @@ class PlantDaoTest {
     }
 
     @Test fun testGetPlants() {
-        val plantList = getValue(plantDao.getPlants())
+        val plantList = getValue(plantDao.getPlants().asLiveData())
         assertThat(plantList.size, equalTo(3))
 
         // Ensure plant list is sorted by name
@@ -65,10 +69,10 @@ class PlantDaoTest {
     }
 
     @Test fun testGetPlantsWithGrowZoneNumber() {
-        val plantList = getValue(plantDao.getPlantsWithGrowZoneNumber(1))
+        val plantList = getValue(plantDao.getPlantsWithGrowZoneNumber(1).asLiveData())
         assertThat(plantList.size, equalTo(2))
-        assertThat(getValue(plantDao.getPlantsWithGrowZoneNumber(2)).size, equalTo(1))
-        assertThat(getValue(plantDao.getPlantsWithGrowZoneNumber(3)).size, equalTo(0))
+        assertThat(getValue(plantDao.getPlantsWithGrowZoneNumber(2).asLiveData()).size, equalTo(1))
+        assertThat(getValue(plantDao.getPlantsWithGrowZoneNumber(3).asLiveData()).size, equalTo(0))
 
         // Ensure plant list is sorted by name
         assertThat(plantList[0], equalTo(plantA))
@@ -76,6 +80,6 @@ class PlantDaoTest {
     }
 
     @Test fun testGetPlant() {
-        assertThat(getValue(plantDao.getPlant(plantA.plantId)), equalTo(plantA))
+        assertThat(getValue(plantDao.getPlant(plantA.plantId).asLiveData()), equalTo(plantA))
     }
 }
