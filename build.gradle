@@ -76,6 +76,9 @@ allprojects {
     repositories {
         google()
         jcenter()
+        flatDir {
+            dirs '../aars'
+        }
     }
 }
 
