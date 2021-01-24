@@ -23,6 +23,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
 import com.google.android.libraries.cloudtesting.screenshots.ScreenShotter
+import com.karumi.ui.view.AcceptanceTest
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
@@ -30,10 +31,9 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 
 @HiltAndroidTest
-class GardenActivityTest {
+class GardenActivityTest: AcceptanceTest<GardenActivity>(GardenActivity::class.java) {
 
     private val hiltRule = HiltAndroidRule(this)
-    private val activityTestRule = ActivityTestRule(GardenActivity::class.java)
 
     @get:Rule
     val rule = RuleChain
@@ -41,6 +41,7 @@ class GardenActivityTest {
         .around(activityTestRule)
 
     @Test fun clickAddPlant_OpensPlantList() {
+        val activity = startActivity()
         // Given that no Plants are added to the user's garden
 
         // When the "Add Plant" button is clicked
@@ -48,6 +49,7 @@ class GardenActivityTest {
 
         // Then the ViewPager should change to the Plant List page
         onView(withId(R.id.plant_list)).check(matches(isDisplayed()))
-        ScreenShotter.takeScreenshot("main_screen_2", activityTestRule.activity /* activity */)
+        ScreenShotter.takeScreenshot("main_screen_2", activity /* activity */)
+        compareScreenshot(activity)
     }
 }
