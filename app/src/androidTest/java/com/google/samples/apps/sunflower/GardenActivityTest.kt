@@ -50,6 +50,6 @@ class GardenActivityTest: AcceptanceTest<GardenActivity>(GardenActivity::class.j
         // Then the ViewPager should change to the Plant List page
         onView(withId(R.id.plant_list)).check(matches(isDisplayed()))
         ScreenShotter.takeScreenshot("main_screen_2", activity /* activity */)
-        compareScreenshot(activity)
+        compareScreenshot(activity.window.decorView)
     }
 }
