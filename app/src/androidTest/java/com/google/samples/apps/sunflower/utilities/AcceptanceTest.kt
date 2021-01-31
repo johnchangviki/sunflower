@@ -20,11 +20,6 @@ abstract class AcceptanceTest<T : Activity>(clazz: Class<T>) : ScreenshotTest {
     @JvmField
     val activityTestRule: IntentsTestRule<T> = IntentsTestRule(clazz, true, false)
 
-    @Before
-    fun setup() {
-        //MockitoAnnotations.initMocks(this)
-    }
-
     fun startActivity(args: Bundle = Bundle()): T {
         val intent = Intent()
         intent.putExtras(args)
