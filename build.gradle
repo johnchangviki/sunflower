@@ -53,6 +53,7 @@ buildscript {
         uiAutomatorVersion = '2.2.0'
         viewPagerVersion = '1.0.0'
         workVersion = '2.1.0'
+        fladleVersion = '0.14.0'
     }
 
     repositories {
@@ -65,6 +66,8 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
+        classpath "com.osacky.flank.gradle:fladle:$fladleVersion"
+        classpath "com.karumi:shot:5.5.0"
     }
 }
 
@@ -76,6 +79,9 @@ allprojects {
     repositories {
         google()
         jcenter()
+        flatDir {
+            dirs '../aars'
+        }
     }
 }
 

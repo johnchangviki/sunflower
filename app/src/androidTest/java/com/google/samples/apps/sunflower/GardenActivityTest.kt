@@ -16,23 +16,31 @@
 
 package com.google.samples.apps.sunflower
 
+import android.app.Activity
+import android.app.KeyguardManager
+import android.content.Context
+import android.content.Context.KEYGUARD_SERVICE
+import android.os.PowerManager
+import android.view.WindowManager
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.rule.ActivityTestRule
+import com.google.android.libraries.cloudtesting.screenshots.ScreenShotter
+import com.karumi.ui.view.AcceptanceTest
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 
+
 @HiltAndroidTest
-class GardenActivityTest {
+class GardenActivityTest: AcceptanceTest<GardenActivity>(GardenActivity::class.java) {
 
     private val hiltRule = HiltAndroidRule(this)
-    private val activityTestRule = ActivityTestRule(GardenActivity::class.java)
 
     @get:Rule
     val rule = RuleChain
@@ -40,12 +48,15 @@ class GardenActivityTest {
         .around(activityTestRule)
 
     @Test fun clickAddPlant_OpensPlantList() {
+        val activity = startActivity()
         // Given that no Plants are added to the user's garden
 
         // When the "Add Plant" button is clicked
-        onView(withId(R.id.add_plant)).perform(click())
+        //onView(withId(R.id.add_plant)).perform(click())
 
         // Then the ViewPager should change to the Plant List page
-        onView(withId(R.id.plant_list)).check(matches(isDisplayed()))
+        //onView(withId(R.id.plant_list)).check(matches(isDisplayed()))
+        ScreenShotter.takeScreenshot("main_screen_2", activity /* activity */)
+        compareScreenshot(activity.window.decorView)
     }
 }

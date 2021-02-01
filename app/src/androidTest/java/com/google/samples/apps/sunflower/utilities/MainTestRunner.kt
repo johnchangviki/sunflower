@@ -17,14 +17,44 @@
 package com.google.samples.apps.sunflower.utilities
 
 import android.app.Application
+import android.app.KeyguardManager
 import android.content.Context
-import androidx.test.runner.AndroidJUnitRunner
+import android.os.Bundle
+import android.os.PowerManager
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
+import androidx.test.runner.lifecycle.Stage
+import com.karumi.shot.ShotTestRunner
 import dagger.hilt.android.testing.HiltTestApplication
 
+
 // A custom runner to set up the instrumented application class for tests.
-class MainTestRunner : AndroidJUnitRunner() {
+class MainTestRunner : ShotTestRunner() {
 
     override fun newApplication(cl: ClassLoader?, name: String?, context: Context?): Application {
         return super.newApplication(cl, HiltTestApplication::class.java.name, context)
+    }
+
+    override fun onCreate(args: Bundle) {
+        super.onCreate(args)
+        ActivityLifecycleMonitorRegistry.getInstance().addLifecycleCallback { activity, stage ->
+            if (stage == Stage.CREATED) {
+                val name: String = MainTestRunner::class.java.simpleName
+                unlockScreen(activity.application, name);
+                keepScreenAwake(activity.application, name);
+            }
+        }
+    }
+
+    private fun unlockScreen(app: Context, name: String) {
+        val keyguard = app.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+        keyguard.newKeyguardLock(name).disableKeyguard()
+    }
+
+    private fun keepScreenAwake(app: Context, name: String) {
+        val power = app.getSystemService(Context.POWER_SERVICE) as PowerManager
+        power.newWakeLock(
+            PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE,
+            name
+        ).acquire()
     }
 }

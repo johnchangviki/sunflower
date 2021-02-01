@@ -19,6 +19,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: "com.osacky.fladle"
+apply plugin: "shot"
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -66,6 +68,20 @@ android {
         disable 'MissingTranslation'
         disable 'ImpliedQuantity'
     }
+    packagingOptions {
+        exclude 'META-INF/AL2.0'
+        exclude 'META-INF/LGPL2.1'
+    }
+}
+
+fladle {
+    serviceAccountCredentials = project.layout.projectDirectory.file("TestLabExample-b587744c8b94.json")
+    // Project Id is not needed if serviceAccountCredentials are set.
+    //projectId = "testlabexample-8c3e5"
+    devices = [
+            [ "model": "Pixel2", "version": "26" ]
+    ]
+    filesToDownload = ['.*/sdcard/.*']
 }
 
 dependencies {
@@ -112,6 +128,7 @@ dependencies {
     androidTestImplementation "androidx.work:work-testing:$rootProject.workVersion"
     androidTestImplementation "com.google.truth:truth:$rootProject.truthVersion"
     androidTestImplementation "com.google.dagger:hilt-android-testing:$rootProject.hiltVersion"
+    androidTestImplementation (name:'cloudtestingscreenshotter_lib', ext:'aar')
     testImplementation "junit:junit:$rootProject.junitVersion"
 }
 
