@@ -23,6 +23,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
 import com.google.android.libraries.cloudtesting.screenshots.ScreenShotter
+import com.squareup.spoon.Spoon
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
@@ -49,5 +50,6 @@ class GardenActivityTest {
         // Then the ViewPager should change to the Plant List page
         onView(withId(R.id.plant_list)).check(matches(isDisplayed()))
         ScreenShotter.takeScreenshot("main_screen_2", activityTestRule.activity /* activity */)
+        Spoon.screenshot(activityTestRule.activity, "main_screen_2")
     }
 }

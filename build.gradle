@@ -58,6 +58,7 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
 
     dependencies {
@@ -65,6 +66,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
+        classpath 'com.jaredsburrows:gradle-spoon-plugin:1.5.1'
     }
 }
 
@@ -79,6 +81,7 @@ allprojects {
         flatDir {
             dirs '../aars'
         }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 }
 
